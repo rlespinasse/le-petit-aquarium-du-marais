@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="rainbow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF4444"/>
+      <stop offset="20%" stop-color="#FF8C00"/>
+      <stop offset="40%" stop-color="#FFD700"/>
+      <stop offset="60%" stop-color="#4CBB17"/>
+      <stop offset="80%" stop-color="#4488FF"/>
+      <stop offset="100%" stop-color="#9B59B6"/>
+    </linearGradient>
+    <linearGradient id="tail-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4488FF"/>
+      <stop offset="50%" stop-color="#9B59B6"/>
+      <stop offset="100%" stop-color="#FF4444"/>
+    </linearGradient>
+    <linearGradient id="fin-grad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#FF8C00"/>
+      <stop offset="100%" stop-color="#FF4444"/>
+    </linearGradient>
+    <linearGradient id="fin-bot-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4CBB17"/>
+      <stop offset="100%" stop-color="#4488FF"/>
+    </linearGradient>
+  </defs>
+  <!-- Body -->
+  <ellipse cx="28" cy="32" rx="20" ry="14" fill="url(#rainbow)" stroke="#C0392B" stroke-width="1.5"/>
+  <!-- Tail -->
+  <polygon points="46,32 60,18 60,46" fill="url(#tail-grad)" stroke="#8E44AD" stroke-width="1.5" stroke-linejoin="round"/>
+  <!-- Top fin -->
+  <path d="M 22 19 L 28 8 L 35 19" fill="url(#fin-grad)" stroke="#C0392B" stroke-width="1" stroke-linejoin="round"/>
+  <!-- Bottom fin -->
+  <path d="M 25 45 L 30 54 L 35 45" fill="url(#fin-bot-grad)" stroke="#2E86C1" stroke-width="1" stroke-linejoin="round"/>
+  <!-- Eye -->
+  <circle cx="18" cy="28" r="5" fill="white" stroke="#333" stroke-width="1"/>
+  <circle cx="16.5" cy="27" r="2.5" fill="#333"/>
+  <circle cx="15.5" cy="26" r="1" fill="white"/>
+  <!-- Mouth -->
+  <path d="M 10 34 Q 13 38 17 34" fill="none" stroke="#C0392B" stroke-width="1.5" stroke-linecap="round"/>
+</svg>
