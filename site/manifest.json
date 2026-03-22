@@ -1,0 +1,14 @@
+{
+  "name": "L'aquarium du Marais",
+  "short_name": "Aquarium",
+  "description": "Un aquarium collaboratif rempli de dessins de poissons faits par des enfants",
+  "start_url": ".",
+  "display": "fullscreen",
+  "background_color": "#0a1628",
+  "theme_color": "#1a8fc4",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "favicon.svg", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
