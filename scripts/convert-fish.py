@@ -20,7 +20,8 @@ SRC_DIR = ROOT / "dessins"
 DST_DIR = ROOT / "site" / "images"
 
 EXTENSIONS = {".jpg", ".jpeg", ".png", ".svg", ".webp", ".bmp", ".tiff", ".tif", ".heic"}
-HASH_FILE = DST_DIR / ".checksums.json"
+CACHE_DIR = ROOT / ".cache"
+HASH_FILE = CACHE_DIR / "checksums.json"
 
 
 def file_hash(path: pathlib.Path) -> str:
@@ -39,6 +40,7 @@ def load_checksums() -> dict[str, str]:
 
 
 def save_checksums(checksums: dict[str, str]):
+    CACHE_DIR.mkdir(exist_ok=True)
     HASH_FILE.write_text(json.dumps(checksums, indent=2) + "\n", encoding="utf-8")
 
 

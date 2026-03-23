@@ -1,4 +1,5 @@
 dist/
+.cache/
 .DS_Store
 
 # Generated favicons (rebuilt from favicon.svg by `just favicon`)
