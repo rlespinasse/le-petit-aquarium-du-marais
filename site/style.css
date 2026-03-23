@@ -388,11 +388,14 @@ main {
   .sand-title { letter-spacing: 0.05em; }
 }
 
-/* ── Fish counter ────────────────────────────────── */
-.fish-counter {
+/* ── Bottom bar (counter + legal) ────────────────── */
+.bottom-bar {
   position: fixed;
   bottom: 20px;
   left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   padding: 6px 14px;
   background: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(8px);
@@ -401,7 +404,20 @@ main {
   font-size: 0.75rem;
   border-radius: 20px;
   z-index: 100;
-  pointer-events: none;
+}
+
+.bottom-sep {
+  opacity: 0.4;
+}
+
+.bottom-legal {
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.bottom-legal:hover {
+  color: rgba(255, 255, 255, 0.9);
 }
 
 /* ── Sound toggle button ─────────────────────────── */
@@ -542,7 +558,7 @@ main {
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     gap: 0.6rem;
   }
-  .fish-counter { font-size: 0.65rem; }
+  .bottom-bar { font-size: 0.65rem; }
 }
 
 /* ── Info toggle button ──────────────────────────── */

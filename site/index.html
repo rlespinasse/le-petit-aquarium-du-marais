@@ -84,8 +84,12 @@
     <div id="srAnnounce" class="sr-only" aria-live="off" aria-atomic="true"></div>
   </main>
 
-  <!-- Fish counter -->
-  <div class="fish-counter" id="fishCounter" aria-hidden="true"></div>
+  <!-- Fish counter + legal link -->
+  <div class="bottom-bar">
+    <span id="fishCounter"></span>
+    <span class="bottom-sep">·</span>
+    <a href="#" id="legalToggleBar" class="bottom-legal">Mentions l&eacute;gales</a>
+  </div>
 
   <!-- Bottom-right buttons -->
   <button class="sound-toggle" id="soundToggle" aria-label="Activer le son" aria-pressed="false">
@@ -110,6 +114,48 @@
     <button class="gallery-close" id="galleryClose" aria-label="Fermer la galerie">&times;</button>
     <h2>Les poissons de l'aquarium</h2>
     <div class="gallery-grid" id="galleryGrid"></div>
+  </div>
+
+  <!-- Legal panel -->
+  <div class="info-panel" id="legalPanel" role="dialog" aria-modal="true" aria-label="Mentions l&eacute;gales">
+    <button class="info-close" id="legalClose" aria-label="Fermer les mentions l&eacute;gales">&times;</button>
+    <h2>Mentions l&eacute;gales</h2>
+
+    <h3>&Eacute;diteur du site</h3>
+    <p>Romain Lespinasse<br>
+    Contact&nbsp;: <a id="legalContact" href="#">...</a></p>
+
+    <h3>Directeur de la publication</h3>
+    <p>Romain Lespinasse</p>
+
+    <h3>H&eacute;bergement</h3>
+    <p>GitHub Pages<br>
+    GitHub, Inc.<br>
+    88 Colin P Kelly Jr St, San Francisco, CA 94107, &Eacute;tats-Unis<br>
+    <a href="https://pages.github.com" rel="noopener">pages.github.com</a></p>
+
+    <h3>Propri&eacute;t&eacute; intellectuelle</h3>
+    <p>Les dessins de poissons pr&eacute;sent&eacute;s sur ce site sont des cr&eacute;ations
+    originales r&eacute;alis&eacute;es par des enfants. Leur reproduction ou r&eacute;utilisation
+    sans autorisation est interdite.</p>
+
+    <h3>Droit &agrave; l'image</h3>
+    <p>Les dessins sont publi&eacute;s avec l'autorisation des repr&eacute;sentants l&eacute;gaux
+    (parents ou tuteurs) des enfants auteurs. Toute demande de retrait peut &ecirc;tre
+    adress&eacute;e &agrave; l'&eacute;diteur du site via l'adresse de contact ci-dessus.</p>
+
+    <h3>Donn&eacute;es personnelles et cookies</h3>
+    <p>Ce site ne collecte aucune donn&eacute;e personnelle et n'utilise aucun cookie.</p>
+    <p>Des statistiques de fr&eacute;quentation anonymes sont collect&eacute;es via
+    <a href="https://www.goatcounter.com" rel="noopener">GoatCounter</a>,
+    un outil respectueux de la vie priv&eacute;e qui ne d&eacute;pose aucun cookie
+    et ne collecte aucune donn&eacute;e personnelle identifiable.</p>
+
+    <h3>Responsabilit&eacute;</h3>
+    <p>L'&eacute;diteur s'efforce d'assurer l'exactitude des informations diffus&eacute;es
+    sur ce site mais ne saurait &ecirc;tre tenu responsable d'erreurs, d'omissions
+    ou des r&eacute;sultats qui pourraient &ecirc;tre obtenus par un mauvais usage
+    de ces informations.</p>
   </div>
 
   <div class="info-panel" id="infoPanel" role="dialog" aria-modal="true" aria-label="Comment contribuer">

@@ -24,16 +24,14 @@
   if (infoTitle) infoTitle.textContent = `Bienvenue dans ${config.title}\u00A0!`;
   const infoMascotName = document.getElementById("infoMascotName");
   if (infoMascotName) infoMascotName.textContent = config.mascot;
-  const infoContact = document.getElementById("infoContact");
-  if (infoContact && config.contact) {
-    try {
-      const email = atob(config.contact);
-      infoContact.href = `mailto:${email}`;
-      infoContact.textContent = email;
-    } catch (e) {
-      infoContact.href = `mailto:${config.contact}`;
-      infoContact.textContent = config.contact;
-    }
+  // Decode contact email (base64) and apply to all contact links
+  if (config.contact) {
+    let email;
+    try { email = atob(config.contact); } catch (e) { email = config.contact; }
+    document.querySelectorAll("#infoContact, #legalContact").forEach((el) => {
+      el.href = `mailto:${email}`;
+      el.textContent = email;
+    });
   }
 
   /* ── Day/night cycle ─────────────────────────── */
@@ -452,6 +450,36 @@
     });
   }
 
+  /* ── Legal panel ─────────────────────────────── */
+  const legalPanel = document.getElementById("legalPanel");
+  const legalBtn = document.getElementById("legalToggle");
+  const legalClose = document.getElementById("legalClose");
+
+  function openLegal() {
+    if (!legalPanel) return;
+    closePanel();
+    legalPanel.classList.add("visible");
+    legalClose.focus();
+  }
+
+  function closeLegal() {
+    if (!legalPanel) return;
+    legalPanel.classList.remove("visible");
+  }
+
+  document.querySelectorAll("#legalToggle, #legalToggle2, #legalToggleBar").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      openLegal();
+    });
+  });
+  if (legalClose) legalClose.addEventListener("click", closeLegal);
+  if (legalPanel) {
+    legalPanel.addEventListener("click", (e) => {
+      if (e.target === legalPanel) closeLegal();
+    });
+  }
+
   /* ── Info panel ──────────────────────────────── */
   const panel = document.getElementById("infoPanel");
   const openBtn = document.getElementById("infoToggle");
@@ -477,14 +505,16 @@
 
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
-      if (galleryPanel && galleryPanel.classList.contains("visible")) {
+      if (legalPanel && legalPanel.classList.contains("visible")) {
+        closeLegal();
+      } else if (galleryPanel && galleryPanel.classList.contains("visible")) {
         closeGallery();
       } else if (panel.classList.contains("visible")) {
         closePanel();
       }
     }
 
-    const activeDialog = [galleryPanel, panel].find(
+    const activeDialog = [legalPanel, galleryPanel, panel].find(
       d => d && d.classList.contains("visible")
     );
     if (e.key === "Tab" && activeDialog) {
