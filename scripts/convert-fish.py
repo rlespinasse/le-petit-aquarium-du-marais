@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
 """Convert fish drawings from dessins/ to web-ready images in images/.
 
-For each image file (prenom.ext) found in dessins/, generates:
-  - images/fish-prenom.png
-  - images/fish-prenom.webp
+For each image file found in dessins/, generates:
+  - images/fish-{stem}.png
+  - images/fish-{stem}.webp
+
+File naming convention:
+  - prenom.ext              → fish drawn by child "Prenom"
+  - prenom--poisson.ext     → fish named "Poisson" drawn by child "Prenom"
 
 Requires ImageMagick (magick) to be installed.
 """

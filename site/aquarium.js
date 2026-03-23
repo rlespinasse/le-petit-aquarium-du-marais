@@ -228,13 +228,13 @@
     const bubble = document.createElement("div");
     bubble.className = "speech-bubble";
     bubble.setAttribute("aria-hidden", "true");
-    bubble.textContent = message;
+    bubble.innerHTML = message;
     container.appendChild(bubble);
 
     fishEl.appendChild(container);
     activeSpeech = container;
 
-    if (srAnnounce) srAnnounce.textContent = message;
+    if (srAnnounce) srAnnounce.textContent = bubble.textContent;
 
     setTimeout(() => {
       if (activeSpeech === container) {
@@ -253,11 +253,13 @@
     if (isMascot) {
       message = fishEl.dataset.message;
     } else {
+      const fishName = fishEl.dataset.fishName;
       const alt = img ? img.getAttribute("alt") || "" : "";
-      const nameMatch = alt.match(/Poisson de (.+)/i);
-      if (nameMatch) {
-        const capitalized = nameMatch[1].charAt(0).toUpperCase() + nameMatch[1].slice(1);
-        message = `Je suis le poisson de ${capitalized}`;
+      const nameMatch = alt.match(/poisson de (.+)/i);
+      if (fishName && nameMatch) {
+        message = `Je suis <strong>${fishName}</strong>, le poisson de <strong>${nameMatch[1]}</strong>`;
+      } else if (nameMatch) {
+        message = `Je suis le poisson de <strong>${nameMatch[1]}</strong>`;
       }
     }
 
@@ -401,8 +403,9 @@
       const img = fishEl.querySelector("img");
       if (!img) return;
       const alt = img.getAttribute("alt") || "";
-      const nameMatch = alt.match(/Poisson de (.+)/i);
-      const name = nameMatch ? nameMatch[1].charAt(0).toUpperCase() + nameMatch[1].slice(1) : "?";
+      const fishName = fishEl.dataset.fishName;
+      const nameMatch = alt.match(/poisson de (.+)/i);
+      const childName = nameMatch ? nameMatch[1] : "?";
 
       const card = document.createElement("div");
       card.className = "gallery-card";
@@ -420,7 +423,7 @@
 
       const label = document.createElement("span");
       label.className = "gallery-name";
-      label.textContent = name;
+      label.textContent = fishName ? `${fishName} (${childName})` : childName;
 
       card.appendChild(cardImg);
       card.appendChild(label);

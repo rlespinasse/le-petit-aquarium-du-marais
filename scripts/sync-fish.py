@@ -30,15 +30,28 @@ SW_ASSETS_START = "// ASSETS_START"
 SW_ASSETS_END = "// ASSETS_END"
 
 
-def name_from_stem(stem: str) -> str:
-    """Derive a display name from a fish stem.
+def _capitalize_name(raw: str) -> str:
+    """Capitalize a hyphenated name: jean-luc -> Jean-Luc."""
+    return "-".join(part.capitalize() for part in raw.split("-"))
 
-    fish-emma  -> Emma
-    fish-jean-luc -> Jean-Luc
+
+def names_from_stem(stem: str) -> tuple[str, str | None]:
+    """Derive child name and optional fish name from a fish stem.
+
+    fish-emma            -> ("Emma", None)
+    fish-jean-luc        -> ("Jean-Luc", None)
+    fish-abel--paillette -> ("Abel", "Paillette")
+    fish-louis--nemo     -> ("Louis", "Némo")
+
+    The '--' separator distinguishes child name from fish name
+    (single '-' is reserved for compound names like Jean-Luc).
     """
     if stem.lower().startswith("fish-"):
         stem = stem[5:]
-    return "-".join(part.capitalize() for part in stem.split("-"))
+    if "--" in stem:
+        child_raw, fish_raw = stem.split("--", 1)
+        return _capitalize_name(child_raw), _capitalize_name(fish_raw)
+    return _capitalize_name(stem), None
 
 
 def collect_fish() -> list[dict]:
@@ -53,46 +66,63 @@ def collect_fish() -> list[dict]:
     fish_list = []
     for stem in sorted(files_by_stem):
         entry = files_by_stem[stem]
-        name = name_from_stem(stem)
-        fish_list.append({"name": name, "files": entry})
+        child_name, fish_name = names_from_stem(stem)
+        fish_list.append({"child_name": child_name, "fish_name": fish_name, "files": entry})
 
     return fish_list
+
+
+def _fish_alt(child_name: str, fish_name: str | None) -> str:
+    """Build the alt text for a fish image."""
+    if fish_name:
+        return f"{fish_name}, poisson de {child_name}"
+    return f"Poisson de {child_name}"
+
+
+def _fish_data_attrs(fish_name: str | None) -> str:
+    """Build extra data attributes for the fish div."""
+    if fish_name:
+        return f' data-fish-name="{fish_name}"'
+    return ""
 
 
 def build_divs(fish_list: list[dict]) -> str:
     lines = []
     for i, fish in enumerate(fish_list, start=1):
-        name = fish["name"]
+        child_name = fish["child_name"]
+        fish_name = fish["fish_name"]
         files = fish["files"]
         webp = files.get(".webp")
         png = files.get(".png")
         svg = files.get(".svg")
+        alt = _fish_alt(child_name, fish_name)
+        data = _fish_data_attrs(fish_name)
 
         if webp and png:
             lines.append(
-                f'    <div class="fish fish-{i}">\n'
+                f'    <div class="fish fish-{i}"{data}>\n'
                 f"      <picture>\n"
                 f'        <source srcset="images/{webp.name}" type="image/webp">\n'
-                f'        <img src="images/{png.name}" alt="Poisson de {name}">\n'
+                f'        <img src="images/{png.name}" alt="{alt}">\n'
                 f"      </picture>\n"
                 f"    </div>"
             )
         elif png:
             lines.append(
-                f'    <div class="fish fish-{i}">\n'
-                f'      <img src="images/{png.name}" alt="Poisson de {name}">\n'
+                f'    <div class="fish fish-{i}"{data}>\n'
+                f'      <img src="images/{png.name}" alt="{alt}">\n'
                 f"    </div>"
             )
         elif svg:
             lines.append(
-                f'    <div class="fish fish-{i}">\n'
-                f'      <img src="images/{svg.name}" alt="Poisson de {name}">\n'
+                f'    <div class="fish fish-{i}"{data}>\n'
+                f'      <img src="images/{svg.name}" alt="{alt}">\n'
                 f"    </div>"
             )
         elif webp:
             lines.append(
-                f'    <div class="fish fish-{i}">\n'
-                f'      <img src="images/{webp.name}" alt="Poisson de {name}">\n'
+                f'    <div class="fish fish-{i}"{data}>\n'
+                f'      <img src="images/{webp.name}" alt="{alt}">\n'
                 f"    </div>"
             )
 
@@ -103,7 +133,8 @@ def build_fish_list(fish_list: list[dict]) -> str:
     """Build an accessible <ul> listing all fish for screen readers."""
     items = []
     for fish in fish_list:
-        items.append(f"        <li>Poisson de {fish['name']}</li>")
+        alt = _fish_alt(fish["child_name"], fish["fish_name"])
+        items.append(f"        <li>{alt}</li>")
     return '      <ul id="fishList">\n' + "\n".join(items) + "\n      </ul>"
 
 
