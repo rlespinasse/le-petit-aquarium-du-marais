@@ -1,2 +1,11 @@
 dist/
 .DS_Store
+
+# Generated favicons (rebuilt from favicon.svg by `just favicon`)
+site/favicon-16.png
+site/favicon-32.png
+site/favicon-48.png
+site/favicon.ico
+site/apple-touch-icon.png
+site/icon-192.png
+site/icon-512.png
