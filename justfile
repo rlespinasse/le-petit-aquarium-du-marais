@@ -1,4 +1,4 @@
-# Mon Petit Aquarium — Developer recipes
+# Le petit aquarium du Marais — Developer recipes
 
 # Default recipe: list available commands
 default:

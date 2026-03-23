@@ -1,4 +1,4 @@
-// Service Worker for Mon Petit Aquarium — offline support
+// Service Worker for Le petit aquarium du Marais — offline support
 // CACHE_VERSION is updated by sync-fish.py when assets change
 const CACHE_VERSION = "aquarium-4c615472";
 

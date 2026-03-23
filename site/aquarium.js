@@ -7,7 +7,7 @@
 
   /* ── Configuration ─────────────────────────────── */
   const config = {
-    title: aquarium.dataset.title || "L'aquarium du Marais",
+    title: aquarium.dataset.title || "Le petit aquarium du Marais",
     mascot: aquarium.dataset.mascot || "Glouglou",
     contact: aquarium.dataset.contact || "",
   };
