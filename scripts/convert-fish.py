@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-"""Convert fish drawings from dessins/ to web-ready images in images/.
+"""Convertit les dessins de poissons de dessins/ en images web dans images/.
 
-For each image file found in dessins/, generates:
+Pour chaque fichier image trouvé dans dessins/, génère :
   - images/fish-{stem}.png
   - images/fish-{stem}.webp
 
-File naming convention:
-  - prenom.ext              → fish drawn by child "Prenom"
-  - prenom--poisson.ext     → fish named "Poisson" drawn by child "Prenom"
+Convention de nommage des fichiers :
+  - prenom.ext              → poisson dessiné par l'enfant « Prenom »
+  - prenom--poisson.ext     → poisson « Poisson » dessiné par l'enfant « Prenom »
 
-Requires ImageMagick (magick) to be installed.
+Nécessite ImageMagick (magick).
 """
 
 import hashlib
@@ -29,7 +29,7 @@ HASH_FILE = CACHE_DIR / "checksums.json"
 
 
 def file_hash(path: pathlib.Path) -> str:
-    """Compute MD5 hash of a file."""
+    """Calcule le hash MD5 d'un fichier."""
     h = hashlib.md5()
     with open(path, "rb") as f:
         for chunk in iter(lambda: f.read(8192), b""):
@@ -49,7 +49,7 @@ def save_checksums(checksums: dict[str, str]):
 
 
 def get_magick_cmd() -> list[str]:
-    """Return the ImageMagick convert command, supporting v6 and v7."""
+    """Renvoie la commande ImageMagick convert, compatible v6 et v7."""
     if shutil.which("magick"):
         return ["magick"]
     if shutil.which("convert"):
@@ -85,7 +85,7 @@ def main():
         png_out = DST_DIR / f"fish-{name}.png"
         webp_out = DST_DIR / f"fish-{name}.webp"
 
-        # Skip if outputs exist and source content hasn't changed
+        # Ignorer si les sorties existent et que le contenu source n'a pas changé
         src_hash = file_hash(src)
         if png_out.exists() and webp_out.exists() and checksums.get(src.name) == src_hash:
             print(f"  skip {src.name} (already up to date)")
@@ -94,7 +94,7 @@ def main():
 
         print(f"  convert {src.name} → fish-{name}.png + fish-{name}.webp")
 
-        # Convert to PNG
+        # Convertir en PNG
         result = subprocess.run(
             [*magick, str(src), "-strip", "-resize", "800x800>", str(png_out)],
             capture_output=True, text=True,
@@ -103,7 +103,7 @@ def main():
             print(f"    ERROR (png): {result.stderr.strip()}", file=sys.stderr)
             continue
 
-        # Convert to WebP
+        # Convertir en WebP
         result = subprocess.run(
             [*magick, str(src), "-strip", "-resize", "800x800>", "-quality", "80", str(webp_out)],
             capture_output=True, text=True,
@@ -115,13 +115,13 @@ def main():
         checksums[src.name] = src_hash
         converted += 1
 
-    # Clean up orphaned files in images/
+    # Supprimer les fichiers orphelins dans images/
     expected_names = {src.stem.lower() for src in source_files}
     removed = 0
     for f in DST_DIR.iterdir():
         if f.name.startswith(".") or f.suffix.lower() not in {".png", ".webp"}:
             continue
-        # fish-prenom.png → prenom
+        # fish-prenom.png → prénom
         stem = f.stem
         if stem.startswith("fish-"):
             stem = stem[5:]
@@ -130,7 +130,7 @@ def main():
             print(f"  remove {f.name} (orphaned)")
             removed += 1
 
-    # Clean up stale checksums
+    # Nettoyer les checksums obsolètes
     current_source_names = {src.name for src in source_files}
     checksums = {k: v for k, v in checksums.items() if k in current_source_names}
 

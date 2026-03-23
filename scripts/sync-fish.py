@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Sync the images/ directory with the fish divs in index.html.
+"""Synchronise le dossier images/ avec les blocs poissons dans index.html.
 
-Scans images/ for image files, groups png/webp pairs into <picture>
-elements, and replaces everything between the FISH:START and FISH:END
-markers in index.html.
+Parcourt images/ à la recherche de fichiers image, regroupe les paires
+png/webp en éléments <picture>, et remplace le contenu entre les marqueurs
+FISH:START et FISH:END dans index.html.
 """
 
 import hashlib
@@ -31,20 +31,20 @@ SW_ASSETS_END = "// ASSETS_END"
 
 
 def _capitalize_name(raw: str) -> str:
-    """Capitalize a hyphenated name: jean-luc -> Jean-Luc."""
+    """Met en majuscule un prénom composé : jean-luc -> Jean-Luc."""
     return "-".join(part.capitalize() for part in raw.split("-"))
 
 
 def names_from_stem(stem: str) -> tuple[str, str | None]:
-    """Derive child name and optional fish name from a fish stem.
+    """Extrait le prénom de l'enfant et le nom du poisson depuis un stem.
 
     fish-emma            -> ("Emma", None)
     fish-jean-luc        -> ("Jean-Luc", None)
     fish-abel--paillette -> ("Abel", "Paillette")
     fish-louis--nemo     -> ("Louis", "Némo")
 
-    The '--' separator distinguishes child name from fish name
-    (single '-' is reserved for compound names like Jean-Luc).
+    Le séparateur '--' distingue le prénom du nom du poisson
+    (le simple '-' est réservé aux prénoms composés comme Jean-Luc).
     """
     if stem.lower().startswith("fish-"):
         stem = stem[5:]
@@ -55,7 +55,7 @@ def names_from_stem(stem: str) -> tuple[str, str | None]:
 
 
 def collect_fish() -> list[dict]:
-    """Group image files by stem, pairing png/webp together."""
+    """Regroupe les fichiers image par stem, en appariant png/webp."""
     files_by_stem: dict[str, dict[str, pathlib.Path]] = {}
 
     for f in FISH_DIR.iterdir():
@@ -73,17 +73,10 @@ def collect_fish() -> list[dict]:
 
 
 def _fish_alt(child_name: str, fish_name: str | None) -> str:
-    """Build the alt text for a fish image."""
+    """Construit le texte alternatif pour une image de poisson."""
     if fish_name:
         return f"{fish_name}, poisson de {child_name}"
     return f"Poisson de {child_name}"
-
-
-def _fish_data_attrs(fish_name: str | None) -> str:
-    """Build extra data attributes for the fish div."""
-    if fish_name:
-        return f' data-fish-name="{fish_name}"'
-    return ""
 
 
 def build_divs(fish_list: list[dict]) -> str:
@@ -96,7 +89,7 @@ def build_divs(fish_list: list[dict]) -> str:
         png = files.get(".png")
         svg = files.get(".svg")
         alt = _fish_alt(child_name, fish_name)
-        data = _fish_data_attrs(fish_name)
+        data = f' data-fish-name="{fish_name}"' if fish_name else ""
 
         if webp and png:
             lines.append(
@@ -130,7 +123,7 @@ def build_divs(fish_list: list[dict]) -> str:
 
 
 def build_fish_list(fish_list: list[dict]) -> str:
-    """Build an accessible <ul> listing all fish for screen readers."""
+    """Construit une liste <ul> accessible de tous les poissons pour les lecteurs d'écran."""
     items = []
     for fish in fish_list:
         alt = _fish_alt(fish["child_name"], fish["fish_name"])
@@ -139,11 +132,11 @@ def build_fish_list(fish_list: list[dict]) -> str:
 
 
 def update_sw(fish_list: list[dict]) -> bool:
-    """Update the service worker asset list and cache version."""
+    """Met à jour la liste des ressources et la version du cache du service worker."""
     if not SW_FILE.exists():
         return False
 
-    # Collect all fish image paths
+    # Collecter tous les chemins d'images de poissons
     fish_assets = []
     for fish in fish_list:
         for ext in (".webp", ".png", ".svg"):
@@ -151,7 +144,7 @@ def update_sw(fish_list: list[dict]) -> bool:
             if f:
                 fish_assets.append(f"images/{f.name}")
 
-    # Build the asset list block
+    # Construire le bloc de la liste des ressources
     base_assets = [
         '  "./"',
         '  "style.css"',
@@ -171,14 +164,14 @@ def update_sw(fish_list: list[dict]) -> bool:
 
     sw_content = SW_FILE.read_text(encoding="utf-8")
 
-    # Replace the assets block
+    # Remplacer le bloc des ressources
     pattern = re.compile(
         re.escape(SW_ASSETS_START) + r".*?" + re.escape(SW_ASSETS_END),
         re.DOTALL,
     )
     new_sw = pattern.sub(assets_block, sw_content)
 
-    # Compute a short hash of all asset paths for the cache version
+    # Calculer un hash court des chemins de ressources pour la version du cache
     content_hash = hashlib.md5(
         "\n".join(sorted(fish_assets)).encode()
     ).hexdigest()[:8]
@@ -196,7 +189,7 @@ def update_sw(fish_list: list[dict]) -> bool:
 
 
 def sync() -> bool:
-    """Return True if index.html was changed."""
+    """Renvoie True si index.html a été modifié."""
     if not FISH_DIR.is_dir():
         print(f"error: {FISH_DIR} not found", file=sys.stderr)
         sys.exit(1)
@@ -211,7 +204,7 @@ def sync() -> bool:
 
     html = INDEX.read_text(encoding="utf-8")
 
-    # Replace fish divs
+    # Remplacer les divs poissons
     pattern = re.compile(
         r"([ \t]*" + re.escape(START_MARKER) + r"[^\n]*\n)"
         r".*?"
@@ -227,7 +220,7 @@ def sync() -> bool:
     replacement = match.group(1) + new_block + match.group(2)
     new_html = html[: match.start()] + replacement + html[match.end() :]
 
-    # Replace accessible fish list
+    # Remplacer la liste accessible des poissons
     list_pattern = re.compile(
         r"([ \t]*" + re.escape(FISHLIST_START) + r"[^\n]*\n)"
         r".*?"

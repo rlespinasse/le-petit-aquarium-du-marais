@@ -1,7 +1,7 @@
 (() => {
   "use strict";
 
-  /* ── Helpers ──────────────────────────────────── */
+  /* ── Utilitaires ────────────────────────────────── */
   const rand = (min, max) => Math.random() * (max - min) + min;
   const aquarium = document.getElementById("aquarium");
 
@@ -12,19 +12,19 @@
     contact: aquarium.dataset.contact || "",
   };
 
-  // Apply title
+  // Appliquer le titre
   document.title = config.title;
   const sandTitle = aquarium.querySelector(".sand-title");
   if (sandTitle) sandTitle.textContent = config.title;
   const srH1 = document.querySelector("h1.sr-only");
   if (srH1) srH1.textContent = `${config.title} — un aquarium collaboratif rempli de dessins de poissons faits par des enfants`;
 
-  // Apply config to info panel
+  // Appliquer la configuration au panneau d'information
   const infoTitle = document.getElementById("infoTitle");
   if (infoTitle) infoTitle.textContent = `Bienvenue dans ${config.title}\u00A0!`;
   const infoMascotName = document.getElementById("infoMascotName");
   if (infoMascotName) infoMascotName.textContent = config.mascot;
-  // Decode contact email (base64) and apply to all contact links
+  // Décoder l'email de contact (base64) et l'appliquer à tous les liens de contact
   if (config.contact) {
     let email;
     try { email = atob(config.contact); } catch (e) { email = config.contact; }
@@ -34,7 +34,7 @@
     });
   }
 
-  /* ── Day/night cycle ─────────────────────────── */
+  /* ── Cycle jour/nuit ────────────────────────────── */
   function getDayPhase() {
     const hour = new Date().getHours();
     if (hour >= 6 && hour < 10) return "dawn";
@@ -79,7 +79,7 @@
   applyDayNight();
   setInterval(applyDayNight, 60000);
 
-  /* ── Floating particles (plankton) ────────────── */
+  /* ── Particules flottantes (plancton) ────────────── */
   const particlesContainer = document.createElement("div");
   particlesContainer.className = "particles";
   particlesContainer.setAttribute("aria-hidden", "true");
@@ -99,7 +99,7 @@
   for (let i = 0; i < 20; i++) setTimeout(spawnParticle, i * 300);
   setInterval(spawnParticle, 1500);
 
-  /* ── Bubbles ──────────────────────────────────── */
+  /* ── Bulles ───────────────────────────────────── */
   const bubblesContainer = document.getElementById("bubbles");
 
   function spawnBubble() {
@@ -119,7 +119,7 @@
   setInterval(spawnBubble, 1200);
   for (let i = 0; i < 5; i++) setTimeout(spawnBubble, i * 200);
 
-  /* ── Mascot fish (favicon) ──────────────────── */
+  /* ── Poisson mascotte (favicon) ──────────────── */
   const contributedFish = document.querySelectorAll(".fish");
   const isAlone = contributedFish.length === 0;
 
@@ -135,20 +135,20 @@
   mascot.appendChild(mascotImg);
   aquarium.appendChild(mascot);
 
-  /* ── Fish population ────────────────────────── */
+  /* ── Population de poissons ─────────────────── */
   const sourceFish = Array.from(document.querySelectorAll(".fish:not(.fish-mascot)"));
 
-  /* ── Fish counter ───────────────────────────── */
-  const totalFishCount = sourceFish.length + 1; // +1 for mascot
+  /* ── Compteur de poissons ───────────────────── */
+  const totalFishCount = sourceFish.length + 1; // +1 pour la mascotte
   const counterEl = document.getElementById("fishCounter");
   if (counterEl) {
     counterEl.textContent = `${totalFishCount} poisson${totalFishCount > 1 ? "s" : ""} dans l'aquarium`;
   }
 
-  /* ── Screen reader announcements ────────────── */
+  /* ── Annonces pour lecteurs d'écran ─────────── */
   const srAnnounce = document.getElementById("srAnnounce");
 
-  /* ── Active speech bubble (only one at a time) ── */
+  /* ── Bulle de dialogue active (une seule à la fois) ── */
   let activeSpeech = null;
 
   function clearActiveSpeech() {
@@ -158,7 +158,7 @@
     }
   }
 
-  /* ── Sound toggle ──────────────────────────────── */
+  /* ── Bouton son ───────────────────────────────── */
   let soundEnabled = false;
   let audioCtx = null;
   let bubbleSoundInterval = null;
@@ -199,7 +199,7 @@
     soundBtn.addEventListener("click", toggleSound);
   }
 
-  /* ── Speech bubble ─────────────────────────────── */
+  /* ── Bulle de dialogue ────────────────────────── */
   function showSpeechBubble(fishEl, message, direction) {
     if (fishEl.style.visibility === "hidden") return;
 
@@ -244,7 +244,7 @@
     }, 3000);
   }
 
-  /* ── Fish click/touch interaction ────────────── */
+  /* ── Interaction clic/toucher sur les poissons ── */
   function onFishClick(fishEl) {
     const img = fishEl.querySelector("img");
     const isMascot = fishEl.dataset.mascot === "true";
@@ -299,7 +299,7 @@
     if (fishEl) onFishClick(fishEl);
   });
 
-  /* ── Fish animation ──────────────────────────── */
+  /* ── Animation des poissons ─────────────────── */
   const fishElements = document.querySelectorAll(".fish");
   const SAFE_TOP_MIN = 5;
   const SAFE_TOP_MAX = 72;
@@ -308,7 +308,7 @@
     const aq = aquarium.getBoundingClientRect();
     const isMascot = fishEl.dataset.mascot === "true";
 
-    // Depth effect: scale drives speed and opacity
+    // Effet de profondeur : l'échelle détermine la vitesse et l'opacité
     const scale = isMascot ? rand(0.8, 1.2) : rand(0.5, 1.5);
     const depthFactor = scale;
     const speed = rand(20, 50) * depthFactor + 15;
@@ -370,21 +370,21 @@
     };
   }
 
-  // Start mascot immediately, then stagger the others
+  // Lancer la mascotte immédiatement, puis échelonner les autres
   animateFish(mascot);
   const otherFish = Array.from(fishElements).filter(f => f !== mascot);
   otherFish.forEach((fish, i) => {
     setTimeout(() => animateFish(fish), (i + 1) * rand(200, 1500));
   });
 
-  /* ── Gallery panel ─────────────────────────────── */
+  /* ── Panneau galerie ──────────────────────────── */
   const galleryPanel = document.getElementById("galleryPanel");
   const galleryBtn = document.getElementById("galleryToggle");
   const galleryClose = document.getElementById("galleryClose");
   const galleryGrid = document.getElementById("galleryGrid");
 
   if (galleryGrid) {
-    // Add mascot first
+    // Ajouter la mascotte en premier
     const mascotCard = document.createElement("div");
     mascotCard.className = "gallery-card";
     const mascotCardImg = document.createElement("img");
@@ -398,7 +398,7 @@
     mascotCard.appendChild(mascotLabel);
     galleryGrid.appendChild(mascotCard);
 
-    // Then contributed fish
+    // Puis les poissons contribués
     sourceFish.forEach((fishEl) => {
       const img = fishEl.querySelector("img");
       if (!img) return;
@@ -453,7 +453,7 @@
     });
   }
 
-  /* ── Legal panel ─────────────────────────────── */
+  /* ── Panneau mentions légales ───────────────── */
   const legalPanel = document.getElementById("legalPanel");
   const legalBtn = document.getElementById("legalToggle");
   const legalClose = document.getElementById("legalClose");
@@ -483,7 +483,7 @@
     });
   }
 
-  /* ── Info panel ──────────────────────────────── */
+  /* ── Panneau d'information ──────────────────── */
   const panel = document.getElementById("infoPanel");
   const openBtn = document.getElementById("infoToggle");
   const closeBtn = document.getElementById("infoClose");

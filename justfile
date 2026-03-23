@@ -1,14 +1,14 @@
-# Le petit aquarium du Marais — Developer recipes
+# Le petit aquarium du Marais — Recettes de développement
 
-# Default recipe: list available commands
+# Recette par défaut : lister les commandes disponibles
 default:
     @just --list
 
-# Convert images from dessins/ to web-ready png/webp in site/images/
+# Convertir les images de dessins/ en png/webp prêts pour le web dans site/images/
 convert:
     python3 scripts/convert-fish.py
 
-# Generate multi-device favicons from site/favicon.svg
+# Générer les favicons multi-appareils depuis site/favicon.svg
 favicon:
     #!/usr/bin/env bash
     set -euo pipefail
@@ -35,27 +35,27 @@ favicon:
     $cmd site/favicon-16.png site/favicon-32.png site/favicon-48.png site/favicon.ico
     echo "Done — favicons generated."
 
-# Sync site/images/ directory with site/index.html
+# Synchroniser le dossier site/images/ avec site/index.html
 sync: convert favicon
     python3 scripts/sync-fish.py
 
-# Serve the site locally (python http server)
+# Servir le site en local (serveur HTTP Python)
 serve port="8000":
     @echo "Aquarium running at http://localhost:{{port}}"
     python3 -m http.server {{port}} -d site
 
-# Sync then serve with auto-reload on file changes
+# Synchroniser puis servir avec rechargement automatique sur changement de fichier
 dev port="8000": sync
     npx --yes concurrently --names "sync,serve" --prefix-colors "yellow,cyan" \
         "npx chokidar-cli 'scripts/**' 'dessins/**' 'site/favicon.svg' -c 'just sync'" \
         "npx browser-sync start --server site --port {{port}} --files 'site/**/*' --no-open --no-notify"
 
-# Serve the production build (dist/)
+# Servir le build de production (dist/)
 serve-prod port="8000": build
     @echo "Production build running at http://localhost:{{port}}"
     python3 -m http.server {{port}} -d dist
 
-# Check that site/images/ and site/index.html are in sync (useful in CI)
+# Vérifier que site/images/ et site/index.html sont synchronisés (utile en CI)
 check:
     #!/usr/bin/env bash
     set -euo pipefail
@@ -70,7 +70,7 @@ check:
     rm site/index.html.bak
     echo "OK: site/index.html is in sync."
 
-# Build for production: copy site/ to dist/, then minify JS/CSS in dist/
+# Construire pour la production : copier site/ vers dist/, puis minifier JS/CSS dans dist/
 build: sync
     #!/usr/bin/env bash
     set -euo pipefail
@@ -81,7 +81,7 @@ build: sync
     npx --yes esbuild dist/style.css --minify --outfile=dist/style.css --allow-overwrite
     echo "Done — production build ready in dist/"
 
-# List all fish in the aquarium
+# Lister tous les poissons de l'aquarium
 list:
     @echo "Fish in the aquarium:"
     @ls -1 site/images/ 2>/dev/null | grep -E '\.(svg|png|jpe?g|webp)$' || echo "  (none)"

@@ -23,7 +23,7 @@
   <main role="main" aria-label="Aquarium interactif">
     <h1 class="sr-only">Le petit aquarium du Marais — un aquarium collaboratif rempli de dessins de poissons faits par des enfants</h1>
 
-    <!-- Accessible scene description -->
+    <!-- Description accessible de la scène -->
     <section class="sr-only" aria-label="Description de la scène">
       <p>
         Un aquarium animé occupe tout l'écran. L'eau est bleu profond, des bulles
@@ -45,7 +45,7 @@
          data-title="Le petit aquarium du Marais"
          data-mascot="Glouglou"
          data-contact="cm9tYWluLmxlc3BpbmFzc2VAZ21haWwuY29t">
-      <!-- SVG filter for hand-drawn sand text effect -->
+      <!-- Filtre SVG pour l'effet de texte tracé dans le sable -->
       <svg class="svg-filters" aria-hidden="true">
         <filter id="sand-roughness">
           <feTurbulence type="turbulence" baseFrequency="0.04" numOctaves="4" result="noise"/>
@@ -80,18 +80,18 @@
       <!-- FISH:END -->
     </div>
 
-    <!-- Live region for screen reader announcements (disabled by default) -->
+    <!-- Zone live pour les annonces aux lecteurs d'écran (désactivée par défaut) -->
     <div id="srAnnounce" class="sr-only" aria-live="off" aria-atomic="true"></div>
   </main>
 
-  <!-- Fish counter + legal link -->
+  <!-- Compteur de poissons + lien mentions légales -->
   <div class="bottom-bar">
     <span id="fishCounter"></span>
     <span class="bottom-sep">·</span>
     <a href="#" id="legalToggleBar" class="bottom-legal">Mentions l&eacute;gales</a>
   </div>
 
-  <!-- Bottom-right buttons -->
+  <!-- Boutons en bas à droite -->
   <button class="sound-toggle" id="soundToggle" aria-label="Activer le son" aria-pressed="false">
     <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
@@ -109,14 +109,14 @@
   </button>
   <button class="info-toggle" id="infoToggle" aria-label="Ouvrir le panneau d'information" aria-expanded="false" aria-controls="infoPanel">?</button>
 
-  <!-- Gallery panel -->
+  <!-- Panneau galerie -->
   <div class="gallery-panel" id="galleryPanel" role="dialog" aria-modal="true" aria-label="Galerie des poissons">
     <button class="gallery-close" id="galleryClose" aria-label="Fermer la galerie">&times;</button>
     <h2>Les poissons de l'aquarium</h2>
     <div class="gallery-grid" id="galleryGrid"></div>
   </div>
 
-  <!-- Legal panel -->
+  <!-- Panneau mentions légales -->
   <div class="info-panel" id="legalPanel" role="dialog" aria-modal="true" aria-label="Mentions l&eacute;gales">
     <button class="info-close" id="legalClose" aria-label="Fermer les mentions l&eacute;gales">&times;</button>
     <h2>Mentions l&eacute;gales</h2>
