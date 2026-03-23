@@ -360,8 +360,9 @@ main {
 }
 
 .speech-bubble {
-  white-space: nowrap;
-  padding: 6px 12px;
+  width: max-content;
+  max-width: 30ch;
+  padding: 8px 12px;
   background: rgba(255, 255, 255, 0.9);
   color: #0b3d5b;
   font-family: "Comic Sans MS", "Chalkboard SE", cursive, sans-serif;
@@ -492,11 +493,16 @@ main {
 }
 
 .gallery-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
   text-align: center;
   background: rgba(255, 255, 255, 0.06);
   border-radius: 12px;
   padding: 0.8rem;
   transition: background 0.2s;
+  min-height: 160px;
 }
 
 .gallery-card:hover {
@@ -505,10 +511,10 @@ main {
 
 .gallery-card img {
   width: 100%;
-  height: auto;
-  max-height: 120px;
+  height: 100px;
   object-fit: contain;
   border-radius: 8px;
+  flex-shrink: 0;
 }
 
 .gallery-name {
