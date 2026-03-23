@@ -640,6 +640,43 @@ main {
   text-decoration: underline;
 }
 
+.help-list {
+  list-style: none;
+  padding-left: 0;
+  line-height: 2;
+}
+
+.help-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.help-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: #7dd6ff;
+}
+
+.help-icon-text {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+  border: 1.5px solid #7dd6ff;
+  border-radius: 50%;
+}
+
+.legal-note {
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  opacity: 0.6;
+  line-height: 1.5;
+  font-style: italic;
+}
+
 .info-panel h3 {
   margin-top: 1.2rem;
   margin-bottom: 0.4rem;
