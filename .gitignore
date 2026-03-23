@@ -9,3 +9,6 @@ site/favicon.ico
 site/apple-touch-icon.png
 site/icon-192.png
 site/icon-512.png
+
+# Generated fish images (rebuilt from dessins/ by `just convert`)
+site/images/
