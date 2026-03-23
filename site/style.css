@@ -423,8 +423,8 @@ main {
 /* ── Sound toggle button ─────────────────────────── */
 .sound-toggle {
   position: fixed;
-  bottom: 20px;
-  right: 76px;
+  bottom: 132px;
+  right: 20px;
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -724,10 +724,14 @@ main {
   .seaweed-3 { height: 70px; }
   .seaweed-4 { height: 50px; }
 
-  .sand { height: 10%; }
+  .sand { height: 15%; }
 
   .info-panel { padding: 1.2rem; }
   .info-panel h1 { font-size: 1.5rem; }
+}
+
+@media (max-width: 1200px) {
+  .sand { height: 15%; }
 }
 
 @media (min-width: 1200px) {
