@@ -141,12 +141,10 @@
   const sourceFish = Array.from(document.querySelectorAll(".fish:not(.fish-mascot)"));
 
   /* ── Fish counter ───────────────────────────── */
-  const uniqueFishCount = sourceFish.length;
+  const totalFishCount = sourceFish.length + 1; // +1 for mascot
   const counterEl = document.getElementById("fishCounter");
   if (counterEl) {
-    counterEl.textContent = uniqueFishCount === 0
-      ? `${config.mascot} attend des copains !`
-      : `${uniqueFishCount} poisson${uniqueFishCount > 1 ? "s" : ""} dans l'aquarium`;
+    counterEl.textContent = `${totalFishCount} poisson${totalFishCount > 1 ? "s" : ""} dans l'aquarium`;
   }
 
   /* ── Screen reader announcements ────────────── */
@@ -386,6 +384,21 @@
   const galleryGrid = document.getElementById("galleryGrid");
 
   if (galleryGrid) {
+    // Add mascot first
+    const mascotCard = document.createElement("div");
+    mascotCard.className = "gallery-card";
+    const mascotCardImg = document.createElement("img");
+    mascotCardImg.src = "favicon.svg";
+    mascotCardImg.alt = `${config.mascot}, la mascotte`;
+    mascotCardImg.loading = "lazy";
+    const mascotLabel = document.createElement("span");
+    mascotLabel.className = "gallery-name";
+    mascotLabel.textContent = config.mascot;
+    mascotCard.appendChild(mascotCardImg);
+    mascotCard.appendChild(mascotLabel);
+    galleryGrid.appendChild(mascotCard);
+
+    // Then contributed fish
     sourceFish.forEach((fishEl) => {
       const img = fishEl.querySelector("img");
       if (!img) return;
