@@ -138,30 +138,7 @@
   aquarium.appendChild(mascot);
 
   /* ── Fish population ────────────────────────── */
-  const MIN_FISH = 5;
-  const MAX_FISH = 15;
   const sourceFish = Array.from(document.querySelectorAll(".fish:not(.fish-mascot)"));
-  const targetCount = Math.max(
-    MIN_FISH,
-    Math.min(MAX_FISH, Math.floor(rand(MIN_FISH, MAX_FISH + 1)))
-  );
-
-  if (sourceFish.length > 0 && sourceFish.length < targetCount) {
-    const parent = sourceFish[0].parentNode;
-    const endMarker = document.querySelector('[class*="FISH:END"]')
-      || parent.querySelector("div.sand")?.previousSibling
-      || null;
-    for (let i = sourceFish.length; i < targetCount; i++) {
-      const original = sourceFish[i % sourceFish.length];
-      const clone = original.cloneNode(true);
-      clone.className = `fish fish-dup-${i}`;
-      if (endMarker) {
-        parent.insertBefore(clone, endMarker);
-      } else {
-        parent.appendChild(clone);
-      }
-    }
-  }
 
   /* ── Fish counter ───────────────────────────── */
   const uniqueFishCount = sourceFish.length;
