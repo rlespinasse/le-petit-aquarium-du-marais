@@ -420,6 +420,61 @@ main {
   color: rgba(255, 255, 255, 0.9);
 }
 
+/* ── Bouton période ─────────────────────────────── */
+.phase-toggle {
+  position: fixed;
+  bottom: 188px;
+  right: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  cursor: pointer;
+  z-index: 100;
+  transition: background 0.2s, width 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.phase-toggle svg { display: block; flex-shrink: 0; }
+
+.phase-toggle:hover { background: rgba(255, 255, 255, 0.35); }
+
+.phase-toggle[aria-pressed="true"] {
+  background: rgba(94, 196, 255, 0.4);
+}
+
+.phase-label {
+  font-family: "Comic Sans MS", "Chalkboard SE", cursive, sans-serif;
+  font-size: 0;
+  font-weight: bold;
+  opacity: 0;
+  max-width: 0;
+  transition: font-size 0.2s, opacity 0.2s, max-width 0.2s;
+}
+
+.phase-toggle:hover .phase-label,
+.phase-toggle:focus .phase-label,
+.phase-toggle[aria-pressed="true"] .phase-label {
+  font-size: 0.7rem;
+  opacity: 1;
+  max-width: 80px;
+}
+
+.phase-toggle:hover,
+.phase-toggle:focus,
+.phase-toggle[aria-pressed="true"] {
+  width: auto;
+  padding: 0 14px 0 12px;
+}
+
 /* ── Bouton son ──────────────────────────────────── */
 .sound-toggle {
   position: fixed;

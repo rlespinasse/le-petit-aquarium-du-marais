@@ -35,7 +35,10 @@
   }
 
   /* ── Cycle jour/nuit ────────────────────────────── */
+  let forcedPhase = null;
+
   function getDayPhase() {
+    if (forcedPhase) return forcedPhase;
     const hour = new Date().getHours();
     if (hour >= 6 && hour < 10) return "dawn";
     if (hour >= 10 && hour < 17) return "day";
@@ -78,6 +81,33 @@
 
   applyDayNight();
   setInterval(applyDayNight, 60000);
+
+  /* ── Sélecteur de période ─────────────────────── */
+  const phaseBtn = document.getElementById("phaseToggle");
+  const phaseLabel = document.getElementById("phaseLabel");
+  const phases = [
+    { value: null,    label: "Auto" },
+    { value: "dawn",  label: "Aube" },
+    { value: "day",   label: "Jour" },
+    { value: "dusk",  label: "Cr\u00e9puscule" },
+    { value: "night", label: "Nuit" },
+  ];
+  let phaseIndex = 0;
+
+  function cyclePhase() {
+    phaseIndex = (phaseIndex + 1) % phases.length;
+    forcedPhase = phases[phaseIndex].value;
+    if (phaseLabel) phaseLabel.textContent = phases[phaseIndex].label;
+    if (phaseBtn) {
+      phaseBtn.setAttribute("aria-pressed", String(forcedPhase !== null));
+      phaseBtn.setAttribute("aria-label",
+        forcedPhase ? `Période : ${phases[phaseIndex].label}` : "Changer la période de la journée"
+      );
+    }
+    applyDayNight();
+  }
+
+  if (phaseBtn) phaseBtn.addEventListener("click", cyclePhase);
 
   /* ── Particules flottantes (plancton) ────────────── */
   const particlesContainer = document.createElement("div");
