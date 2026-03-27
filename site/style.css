@@ -33,6 +33,15 @@
   top: 0;
 }
 
+:focus-visible {
+  outline: 2px solid #5ec4ff;
+  outline-offset: 3px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -388,6 +397,44 @@ main {
   .sand-title { letter-spacing: 0.05em; }
 }
 
+/* ── Groupe de contrôles ─────────────────────────── */
+.controls {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  z-index: 100;
+}
+
+/* Propriétés communes à tous les boutons de contrôle */
+.phase-toggle,
+.sound-toggle,
+.gallery-toggle,
+.info-toggle {
+  width: 48px;
+  height: 48px;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+}
+
+.phase-toggle:active,
+.sound-toggle:active,
+.gallery-toggle:active,
+.info-toggle:active {
+  background: rgba(255, 255, 255, 0.45);
+  transform: scale(0.95);
+}
+
 /* ── Barre inférieure (compteur + mentions légales) ── */
 .bottom-bar {
   position: fixed;
@@ -397,9 +444,9 @@ main {
   align-items: center;
   gap: 6px;
   padding: 6px 14px;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.9);
   font-family: "Comic Sans MS", "Chalkboard SE", cursive, sans-serif;
   font-size: 0.75rem;
   border-radius: 20px;
@@ -411,33 +458,27 @@ main {
 }
 
 .bottom-legal {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
   transition: color 0.2s;
+  padding: 8px 4px;
+  margin: -8px -4px;
 }
 
 .bottom-legal:hover {
   color: rgba(255, 255, 255, 0.9);
 }
 
+.bottom-legal:focus-visible {
+  outline: 2px solid #5ec4ff;
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
 /* ── Bouton période ─────────────────────────────── */
 .phase-toggle {
-  position: fixed;
-  bottom: 188px;
-  right: 20px;
-  width: 48px;
-  height: 48px;
   border-radius: 24px;
-  border: none;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(8px);
-  color: #fff;
-  cursor: pointer;
-  z-index: 100;
   transition: background 0.2s, width 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   gap: 4px;
   overflow: hidden;
   white-space: nowrap;
@@ -477,22 +518,8 @@ main {
 
 /* ── Bouton son ──────────────────────────────────── */
 .sound-toggle {
-  position: fixed;
-  bottom: 132px;
-  right: 20px;
-  width: 48px;
-  height: 48px;
   border-radius: 50%;
-  border: none;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(8px);
-  color: #fff;
-  cursor: pointer;
-  z-index: 100;
   transition: background 0.2s, opacity 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .sound-toggle svg { display: block; }
@@ -509,22 +536,8 @@ main {
 
 /* ── Bouton galerie ──────────────────────────────── */
 .gallery-toggle {
-  position: fixed;
-  bottom: 76px;
-  right: 20px;
-  width: 48px;
-  height: 48px;
   border-radius: 50%;
-  border: none;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(8px);
-  color: #fff;
-  cursor: pointer;
-  z-index: 100;
   transition: background 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .gallery-toggle svg { display: block; }
@@ -538,7 +551,10 @@ main {
   background: rgba(7, 42, 63, 0.95);
   backdrop-filter: blur(12px);
   color: #e0f0ff;
-  padding: 2rem;
+  padding: max(2rem, env(safe-area-inset-top))
+           max(2rem, env(safe-area-inset-right))
+           max(2rem, env(safe-area-inset-bottom))
+           max(2rem, env(safe-area-inset-left));
   overflow-y: auto;
   z-index: 200;
   opacity: 0;
@@ -599,13 +615,25 @@ main {
 
 .gallery-close {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: none;
+  top: max(1rem, env(safe-area-inset-top));
+  right: max(1rem, env(safe-area-inset-right));
+  background: rgba(255, 255, 255, 0.1);
   border: none;
+  border-radius: 50%;
   color: #e0f0ff;
   font-size: 2rem;
   cursor: pointer;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  touch-action: manipulation;
+}
+
+.gallery-close:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 @media (max-width: 600px) {
@@ -613,25 +641,18 @@ main {
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     gap: 0.6rem;
   }
-  .bottom-bar { font-size: 0.65rem; }
+  .bottom-bar {
+    font-size: 0.65rem;
+    max-width: calc(100vw - 100px);
+    flex-wrap: wrap;
+  }
 }
 
 /* ── Bouton information ──────────────────────────── */
 .info-toggle {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 48px;
-  height: 48px;
   border-radius: 50%;
-  border: none;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(8px);
-  color: #fff;
   font-size: 1.4rem;
   font-weight: bold;
-  cursor: pointer;
-  z-index: 100;
   transition: background 0.2s;
 }
 
@@ -644,7 +665,10 @@ main {
   background: rgba(7, 42, 63, 0.95);
   backdrop-filter: blur(12px);
   color: #e0f0ff;
-  padding: 2rem;
+  padding: max(2rem, env(safe-area-inset-top))
+           max(2rem, env(safe-area-inset-right))
+           max(2rem, env(safe-area-inset-bottom))
+           max(2rem, env(safe-area-inset-left));
   overflow-y: auto;
   z-index: 200;
   opacity: 0;
@@ -758,13 +782,38 @@ main {
 
 .info-close {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: none;
+  top: max(1rem, env(safe-area-inset-top));
+  right: max(1rem, env(safe-area-inset-right));
+  background: rgba(255, 255, 255, 0.1);
   border: none;
+  border-radius: 50%;
   color: #e0f0ff;
   font-size: 2rem;
   cursor: pointer;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  touch-action: manipulation;
+}
+
+.info-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ── Label période toujours visible sur écrans tactiles ── */
+@media (hover: none) {
+  .phase-toggle {
+    width: auto;
+    padding: 0 14px 0 12px;
+  }
+  .phase-label {
+    font-size: 0.7rem;
+    opacity: 1;
+    max-width: 80px;
+  }
 }
 
 /* ── Ajustements responsive ──────────────────────── */
@@ -781,7 +830,13 @@ main {
 
   .sand { height: 15%; }
 
-  .info-panel { padding: 1.2rem; }
+  .info-panel,
+  .gallery-panel {
+    padding: max(1rem, env(safe-area-inset-top))
+             max(1rem, env(safe-area-inset-right))
+             max(1rem, env(safe-area-inset-bottom))
+             max(1rem, env(safe-area-inset-left));
+  }
   .info-panel h1 { font-size: 1.5rem; }
 }
 

@@ -487,9 +487,11 @@
   const legalPanel = document.getElementById("legalPanel");
   const legalBtn = document.getElementById("legalToggle");
   const legalClose = document.getElementById("legalClose");
+  let legalOpener = null;
 
   function openLegal() {
     if (!legalPanel) return;
+    legalOpener = document.activeElement;
     closePanel();
     legalPanel.classList.add("visible");
     legalClose.focus();
@@ -498,6 +500,8 @@
   function closeLegal() {
     if (!legalPanel) return;
     legalPanel.classList.remove("visible");
+    if (legalOpener) legalOpener.focus();
+    legalOpener = null;
   }
 
   document.querySelectorAll("#legalToggle, #legalToggle2, #legalToggleBar").forEach((btn) => {

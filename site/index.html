@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Le petit aquarium du Marais</title>
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="favicon.ico" sizes="48x48">
@@ -113,6 +113,7 @@
   </div>
 
   <!-- Boutons en bas à droite -->
+  <div class="controls" role="group" aria-label="Contrôles de l'aquarium">
   <button class="phase-toggle" id="phaseToggle" aria-label="Changer la période de la journée" aria-pressed="false">
     <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="12" cy="12" r="5"/>
@@ -143,6 +144,7 @@
     </svg>
   </button>
   <button class="info-toggle" id="infoToggle" aria-label="Ouvrir le panneau d'information" aria-expanded="false" aria-controls="infoPanel">?</button>
+  </div>
 
   <!-- Panneau galerie -->
   <div class="gallery-panel" id="galleryPanel" role="dialog" aria-modal="true" aria-label="Galerie des poissons">
