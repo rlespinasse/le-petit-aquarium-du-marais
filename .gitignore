@@ -11,5 +11,8 @@ site/apple-touch-icon.png
 site/icon-192.png
 site/icon-512.png
 
+# Source drawings (fetched from external storage by `just fetch`)
+dessins/
+
 # Generated fish images (rebuilt from dessins/ by `just convert`)
 site/images/

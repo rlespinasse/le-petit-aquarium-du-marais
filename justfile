@@ -4,6 +4,10 @@
 default:
     @just --list
 
+# Récupérer les dessins depuis le stockage externe (Nextcloud ou R2)
+fetch:
+    python3 scripts/fetch-drawings.py
+
 # Convertir les images de dessins/ en png/webp prêts pour le web dans site/images/
 convert:
     python3 scripts/convert-fish.py

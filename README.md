@@ -18,6 +18,9 @@ Chaque enfant dessine et colorie un poisson sur papier. Un adulte prend le dessi
 git clone https://github.com/rlespinasse/le-petit-aquarium-du-marais.git
 cd le-petit-aquarium-du-marais
 
+# Récupérer les dessins depuis le stockage externe (voir CONTRIBUTING.md)
+just fetch
+
 # Synchroniser les images et lancer le site en local
 just sync
 just serve
@@ -34,7 +37,7 @@ just dev
 ## Structure du projet
 
 ```
-dessins/                 # Photos originales des dessins (source)
+dessins/                 # Photos originales des dessins (récupérées via just fetch)
 site/                    # Site statique (HTML, CSS, JS)
   images/                # Images converties (png + webp), générées par just convert
   index.html             # Page principale, mise à jour par just sync
@@ -43,15 +46,19 @@ site/                    # Site statique (HTML, CSS, JS)
   sw.js                  # Service worker (cache hors-ligne)
 dist/                    # Build de production, généré par just build
 scripts/
+  fetch-drawings.py      # Récupération des dessins depuis le stockage externe
   convert-fish.py        # Conversion des dessins en png/webp
   sync-fish.py           # Synchronisation images → index.html + sw.js
 ```
+
+Les dessins originaux ne sont pas stockés dans le dépôt Git. Ils sont hébergés sur un stockage externe (Nextcloud ou Cloudflare R2) et récupérés lors du build. Voir [CONTRIBUTING.md](CONTRIBUTING.md) pour la configuration.
 
 ## Commandes disponibles
 
 | Commande | Description |
 |----------|-------------|
 | `just` | Liste toutes les commandes disponibles |
+| `just fetch` | Récupère les dessins depuis le stockage externe (Nextcloud ou R2) |
 | `just convert` | Convertit les images de `dessins/` en png/webp dans `site/images/` |
 | `just sync` | Convertit les images, génère les favicons, et met à jour `index.html` |
 | `just serve` | Lance un serveur local sur le port 8000 |
