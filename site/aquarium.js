@@ -209,6 +209,24 @@
   /* ── Population de poissons ─────────────────── */
   const sourceFish = Array.from(document.querySelectorAll(".fish:not(.fish-mascot)"));
 
+  // Compter les poissons par enfant pour égaliser la fréquence d'apparition
+  const childFishCount = {};
+  sourceFish.forEach((fishEl) => {
+    const img = fishEl.querySelector("img");
+    const alt = img ? img.getAttribute("alt") || "" : "";
+    const nameMatch = alt.match(/poisson de (.+)/i);
+    if (nameMatch) {
+      const child = nameMatch[1];
+      childFishCount[child] = (childFishCount[child] || 0) + 1;
+    }
+  });
+  sourceFish.forEach((fishEl) => {
+    const img = fishEl.querySelector("img");
+    const alt = img ? img.getAttribute("alt") || "" : "";
+    const nameMatch = alt.match(/poisson de (.+)/i);
+    fishEl.dataset.childFishCount = nameMatch ? (childFishCount[nameMatch[1]] || 1) : 1;
+  });
+
   /* ── Compteur de poissons ───────────────────── */
   const totalFishCount = sourceFish.length + 1; // +1 pour la mascotte
   const counterEl = document.getElementById("fishCounter");
@@ -443,7 +461,8 @@
 
     animation.onfinish = () => {
       fishEl.style.visibility = "hidden";
-      setTimeout(() => animateFish(fishEl), rand(500, 3000));
+      const fairnessMultiplier = parseInt(fishEl.dataset.childFishCount || "1", 10);
+      setTimeout(() => animateFish(fishEl), rand(500, 3000) * fairnessMultiplier);
     };
   }
 
