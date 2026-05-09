@@ -573,6 +573,10 @@ main {
 
 .sound-toggle svg { display: block; }
 
+.sound-toggle .icon-off { display: none; }
+.sound-toggle.is-muted .icon-on  { display: none; }
+.sound-toggle.is-muted .icon-off { display: block; }
+
 .sound-toggle:hover { background: rgba(255, 255, 255, 0.35); }
 
 .sound-toggle[aria-pressed="true"] {
@@ -580,7 +584,7 @@ main {
 }
 
 .sound-toggle[aria-pressed="false"] {
-  opacity: 0.5;
+  opacity: 0.7;
 }
 
 /* ── Bouton galerie ──────────────────────────────── */

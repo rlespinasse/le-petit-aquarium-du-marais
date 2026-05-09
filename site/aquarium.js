@@ -248,45 +248,83 @@
   }
 
   /* ── Bouton son ───────────────────────────────── */
+  const SOUND_PREF_KEY = "aquarium.soundEnabled";
   let soundEnabled = false;
   let audioCtx = null;
-  let bubbleSoundInterval = null;
+  let bubbleSoundTimeout = null;
   const soundBtn = document.getElementById("soundToggle");
 
   function playBubbleSound() {
-    if (!audioCtx || !soundEnabled) return;
+    if (!audioCtx || !soundEnabled || audioCtx.state !== "running") return;
+    const t = audioCtx.currentTime;
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     osc.type = "sine";
-    osc.frequency.setValueAtTime(rand(400, 900), audioCtx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(rand(200, 500), audioCtx.currentTime + 0.15);
-    gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc.start();
-    osc.stop(audioCtx.currentTime + 0.2);
+    osc.frequency.setValueAtTime(rand(400, 900), t);
+    osc.frequency.exponentialRampToValueAtTime(rand(200, 500), t + 0.15);
+    gain.gain.setValueAtTime(0.03, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start(t);
+    osc.stop(t + 0.2);
+    osc.onended = () => { try { osc.disconnect(); gain.disconnect(); } catch (_) {} };
+  }
+
+  function scheduleNextBubble() {
+    clearTimeout(bubbleSoundTimeout);
+    if (!soundEnabled) return;
+    bubbleSoundTimeout = setTimeout(() => {
+      playBubbleSound();
+      scheduleNextBubble();
+    }, rand(2000, 5000));
+  }
+
+  function stopBubbles() {
+    clearTimeout(bubbleSoundTimeout);
+    bubbleSoundTimeout = null;
+  }
+
+  function applySoundUI() {
+    if (!soundBtn) return;
+    soundBtn.setAttribute("aria-pressed", String(soundEnabled));
+    soundBtn.setAttribute("aria-label", soundEnabled ? "Couper le son" : "Activer le son");
+    soundBtn.classList.toggle("is-muted", !soundEnabled);
+  }
+
+  async function enableSound() {
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === "suspended") await audioCtx.resume();
+    } catch (_) {
+      soundEnabled = false;
+      applySoundUI();
+      return;
+    }
+    scheduleNextBubble();
+  }
+
+  function disableSound() {
+    stopBubbles();
+    if (audioCtx && audioCtx.state === "running") audioCtx.suspend().catch(() => {});
   }
 
   function toggleSound() {
     soundEnabled = !soundEnabled;
-    if (soundBtn) {
-      soundBtn.setAttribute("aria-pressed", String(soundEnabled));
-      soundBtn.setAttribute("aria-label",
-        soundEnabled ? "Couper le son" : "Activer le son"
-      );
-    }
-    if (soundEnabled) {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      bubbleSoundInterval = setInterval(playBubbleSound, rand(2000, 5000));
-    } else {
-      clearInterval(bubbleSoundInterval);
-    }
+    try { localStorage.setItem(SOUND_PREF_KEY, soundEnabled ? "1" : "0"); } catch (_) {}
+    applySoundUI();
+    if (soundEnabled) enableSound(); else disableSound();
   }
 
-  if (soundBtn) {
-    soundBtn.addEventListener("click", toggleSound);
-  }
+  if (soundBtn) soundBtn.addEventListener("click", toggleSound);
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stopBubbles();
+    else if (soundEnabled) scheduleNextBubble();
+  });
+  window.addEventListener("pagehide", () => {
+    stopBubbles();
+    if (audioCtx) { audioCtx.close().catch(() => {}); audioCtx = null; }
+  });
 
   /* ── Bulle de dialogue ────────────────────────── */
   function showSpeechBubble(fishEl, message, direction) {
