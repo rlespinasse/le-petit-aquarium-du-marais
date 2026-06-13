@@ -427,6 +427,7 @@ main {
 
 /* Propriétés communes à tous les boutons de contrôle */
 .phase-toggle,
+.scene-toggle,
 .sound-toggle,
 .gallery-toggle,
 .info-toggle,
@@ -457,6 +458,7 @@ main {
 }
 
 .phase-toggle:active,
+.scene-toggle:active,
 .sound-toggle:active,
 .gallery-toggle:active,
 .info-toggle:active,
@@ -559,6 +561,48 @@ main {
 .phase-toggle:hover,
 .phase-toggle:focus,
 .phase-toggle.phase-showing {
+  width: auto;
+  padding: 0 14px 0 12px;
+  border-radius: 24px;
+  gap: 4px;
+}
+
+/* ── Bouton décor ───────────────────────────────── */
+.scene-toggle {
+  border-radius: 50%;
+  transition: background 0.2s, width 0.2s, border-radius 0.2s;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.scene-toggle svg { display: block; flex-shrink: 0; }
+
+.scene-toggle:hover { background: rgba(255, 255, 255, 0.35); }
+
+.scene-toggle[aria-pressed="true"] {
+  background: rgba(94, 196, 255, 0.4);
+}
+
+.scene-label {
+  font-family: "Comic Sans MS", "Chalkboard SE", cursive, sans-serif;
+  font-size: 0;
+  font-weight: bold;
+  opacity: 0;
+  max-width: 0;
+  transition: font-size 0.2s, opacity 0.2s, max-width 0.2s;
+}
+
+.scene-toggle:hover .scene-label,
+.scene-toggle:focus .scene-label,
+.scene-toggle.scene-showing .scene-label {
+  font-size: 0.7rem;
+  opacity: 1;
+  max-width: 120px;
+}
+
+.scene-toggle:hover,
+.scene-toggle:focus,
+.scene-toggle.scene-showing {
   width: auto;
   padding: 0 14px 0 12px;
   border-radius: 24px;
@@ -723,7 +767,7 @@ main {
   }
 
   .controls-drawer.open .controls-drawer-items {
-    max-height: 180px; /* 3 × 48px + 2 × 8px gap */
+    max-height: 232px; /* 4 × 48px + 3 × 8px gap */
   }
 
   .controls-drawer-toggle {
@@ -941,4 +985,128 @@ main {
 
 @media (min-width: 1920px) {
   .fish img { height: 130px; max-width: 260px; }
+}
+
+/* ════════════════════════════════════════════════════
+   Décors (scènes)
+   Le fond d'eau (dégradés jour/nuit) est piloté en JS.
+   Ici, seules les couleurs du décor changent selon
+   l'attribut data-scene posé sur #aquarium.
+   Le décor « marais » = styles par défaut (aucune règle).
+   ════════════════════════════════════════════════════ */
+
+/* ── Récif corallien ────────────────────────────── */
+.aquarium[data-scene="recif"] .sand {
+  background: linear-gradient(0deg, #f5e6c8 0%, #ecdab2 40%, #e0c897 100%);
+}
+.aquarium[data-scene="recif"] .sand-title {
+  background: linear-gradient(180deg, #d9a441 0%, #c98e2e 50%, #b87a1f 100%);
+}
+.aquarium[data-scene="recif"] .seaweed-1,
+.aquarium[data-scene="recif"] .seaweed-3 {
+  background: linear-gradient(0deg, #c0392b, #ff6b5e);
+}
+.aquarium[data-scene="recif"] .seaweed-2 {
+  background: linear-gradient(0deg, #7d3c98, #d96bd6);
+}
+.aquarium[data-scene="recif"] .seaweed-4 {
+  background: linear-gradient(0deg, #d35400, #ff9d3c);
+}
+.aquarium[data-scene="recif"] .rock-1 {
+  background: linear-gradient(135deg, #d98a6a, #b5654a);
+}
+.aquarium[data-scene="recif"] .rock-2 {
+  background: linear-gradient(135deg, #e0a07a, #c07355);
+}
+.aquarium[data-scene="recif"] .particle {
+  background: rgba(255, 255, 255, 0.3);
+}
+.aquarium[data-scene="recif"] .bubble {
+  background: radial-gradient(circle at 30% 30%, rgba(220, 255, 255, 0.55), rgba(220, 255, 255, 0.12));
+}
+.aquarium[data-scene="recif"] .water-surface {
+  background: repeating-linear-gradient(90deg,
+    rgba(255, 255, 255, 0.12) 0px,
+    rgba(255, 255, 255, 0.03) 40px,
+    rgba(255, 255, 255, 0.12) 80px);
+}
+.aquarium[data-scene="recif"] .fish img {
+  box-shadow: 0 0 12px rgba(120, 230, 220, 0.35), 0 0 24px rgba(120, 230, 220, 0.18);
+  background: radial-gradient(ellipse at center, rgba(120, 230, 220, 0.14), transparent 70%);
+}
+
+/* ── Banquise polaire ───────────────────────────── */
+.aquarium[data-scene="banquise"] .sand {
+  background: linear-gradient(0deg, #dfeaf2 0%, #cdddea 40%, #bcd0e0 100%);
+}
+.aquarium[data-scene="banquise"] .sand-title {
+  background: linear-gradient(180deg, #7fa8c4 0%, #6a93b0 50%, #57809c 100%);
+}
+.aquarium[data-scene="banquise"] .seaweed-1,
+.aquarium[data-scene="banquise"] .seaweed-3 {
+  background: linear-gradient(0deg, #aac9dd, #e3f1fa);
+}
+.aquarium[data-scene="banquise"] .seaweed-2,
+.aquarium[data-scene="banquise"] .seaweed-4 {
+  background: linear-gradient(0deg, #9bbcd2, #d4e8f4);
+}
+.aquarium[data-scene="banquise"] .rock-1 {
+  background: linear-gradient(135deg, #c7dcea, #9bb8cc);
+}
+.aquarium[data-scene="banquise"] .rock-2 {
+  background: linear-gradient(135deg, #d6e6f0, #a8c4d6);
+}
+.aquarium[data-scene="banquise"] .particle {
+  background: rgba(255, 255, 255, 0.45);
+}
+.aquarium[data-scene="banquise"] .bubble {
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.7), rgba(210, 235, 250, 0.15));
+}
+.aquarium[data-scene="banquise"] .water-surface {
+  background: repeating-linear-gradient(90deg,
+    rgba(255, 255, 255, 0.14) 0px,
+    rgba(255, 255, 255, 0.04) 40px,
+    rgba(255, 255, 255, 0.14) 80px);
+}
+.aquarium[data-scene="banquise"] .fish img {
+  box-shadow: 0 0 12px rgba(170, 210, 240, 0.35), 0 0 24px rgba(170, 210, 240, 0.18);
+  background: radial-gradient(ellipse at center, rgba(170, 210, 240, 0.14), transparent 70%);
+}
+
+/* ── Lagon tropical au coucher ──────────────────── */
+.aquarium[data-scene="lagon"] .sand {
+  background: linear-gradient(0deg, #f3e4c4 0%, #ecd7ad 40%, #e2c896 100%);
+}
+.aquarium[data-scene="lagon"] .sand-title {
+  background: linear-gradient(180deg, #c98e3a 0%, #b8782a 50%, #a3661c 100%);
+}
+.aquarium[data-scene="lagon"] .seaweed-1,
+.aquarium[data-scene="lagon"] .seaweed-3 {
+  background: linear-gradient(0deg, #2e8b57, #7ed957);
+}
+.aquarium[data-scene="lagon"] .seaweed-2,
+.aquarium[data-scene="lagon"] .seaweed-4 {
+  background: linear-gradient(0deg, #3a9d68, #9ee37a);
+}
+.aquarium[data-scene="lagon"] .rock-1 {
+  background: linear-gradient(135deg, #b0987a, #8a7355);
+}
+.aquarium[data-scene="lagon"] .rock-2 {
+  background: linear-gradient(135deg, #c0a585, #9a8060);
+}
+.aquarium[data-scene="lagon"] .particle {
+  background: rgba(255, 240, 220, 0.35);
+}
+.aquarium[data-scene="lagon"] .bubble {
+  background: radial-gradient(circle at 30% 30%, rgba(255, 245, 230, 0.55), rgba(255, 220, 200, 0.12));
+}
+.aquarium[data-scene="lagon"] .water-surface {
+  background: repeating-linear-gradient(90deg,
+    rgba(255, 235, 200, 0.12) 0px,
+    rgba(255, 235, 200, 0.03) 40px,
+    rgba(255, 235, 200, 0.12) 80px);
+}
+.aquarium[data-scene="lagon"] .fish img {
+  box-shadow: 0 0 12px rgba(255, 200, 150, 0.35), 0 0 24px rgba(255, 160, 180, 0.18);
+  background: radial-gradient(ellipse at center, rgba(255, 210, 170, 0.14), transparent 70%);
 }

@@ -34,6 +34,65 @@
     });
   }
 
+  /* ── Décors (scènes) ────────────────────────────── */
+  // Tracés d'icônes lucide-style pour le bouton de décor ; les attributs SVG
+  // communs sont ajoutés au moment du rendu (cf. SVG_ATTRS / updateSceneIcon).
+  const SCENE_ICON_PATHS = {
+    marais:   '<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6"/>',
+    recif:    '<path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>',
+    banquise: '<line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/><path d="m20 16-4-4 4-4"/><path d="m4 8 4 4-4 4"/><path d="m16 4-4 4-4-4"/><path d="m8 20 4-4 4 4"/>',
+    lagon:    '<circle cx="12" cy="9" r="4"/><path d="M12 1v2M4.2 4.2l1.4 1.4M1 9h2M21 9h2M18.4 4.2 17 5.6"/><path d="M2 16c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2"/><path d="M2 20c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2"/>',
+  };
+
+  const scenes = {
+    marais: {
+      key: "marais",
+      label: "Marais",
+      desc: "eau bleu profond, sable doré et algues vertes",
+      gradients: {
+        dawn:  "linear-gradient(180deg, #f4a460 0%, #e07850 10%, #1a8fc4 35%, #14729e 55%, #0e5a7e 75%, #072a3f 100%)",
+        day:   "linear-gradient(180deg, #1a8fc4 0%, #14729e 20%, #0e5a7e 45%, #0b3d5b 70%, #072a3f 100%)",
+        dusk:  "linear-gradient(180deg, #c0392b 0%, #d35400 10%, #1a6b8a 35%, #0e5a7e 55%, #0b3d5b 75%, #072a3f 100%)",
+        night: "linear-gradient(180deg, #0a1628 0%, #0b2040 20%, #0a2a4a 45%, #081e35 70%, #050e1a 100%)",
+      },
+    },
+    recif: {
+      key: "recif",
+      label: "Récif corallien",
+      desc: "eau turquoise lumineuse, sable clair et coraux colorés",
+      gradients: {
+        dawn:  "linear-gradient(180deg, #ffd9a0 0%, #ff9e7a 10%, #2ec4d6 35%, #16a6c0 55%, #0d7e9e 75%, #064861 100%)",
+        day:   "linear-gradient(180deg, #38d6e0 0%, #1fbfd4 20%, #119fbe 45%, #0a7494 70%, #064861 100%)",
+        dusk:  "linear-gradient(180deg, #ff7e5f 0%, #ff6a88 10%, #2aa6c4 35%, #117e9e 55%, #0a5c78 75%, #053547 100%)",
+        night: "linear-gradient(180deg, #08243a 0%, #0a3050 20%, #0d3a54 45%, #082838 70%, #04141f 100%)",
+      },
+    },
+    banquise: {
+      key: "banquise",
+      label: "Banquise polaire",
+      desc: "eau bleu-glacier froide, fond clair et blocs de glace",
+      gradients: {
+        dawn:  "linear-gradient(180deg, #ffe0e6 0%, #d7c4e6 10%, #acd8ec 35%, #7fbfdc 55%, #5a9cc0 75%, #2e5f7e 100%)",
+        day:   "linear-gradient(180deg, #cfeefb 0%, #a9dcf0 20%, #7fc1e0 45%, #4f93b8 70%, #2e5f7e 100%)",
+        dusk:  "linear-gradient(180deg, #f6c6c6 0%, #d9a0c0 10%, #9cc0dc 35%, #6f9cc0 55%, #4a7898 75%, #244a64 100%)",
+        night: "linear-gradient(180deg, #0c1c34 0%, #14304f 20%, #1a3c5c 45%, #122a44 70%, #08182a 100%)",
+      },
+    },
+    lagon: {
+      key: "lagon",
+      label: "Lagon tropical",
+      desc: "eau chaude turquoise et dorée, sable pâle et herbiers verts",
+      gradients: {
+        dawn:  "linear-gradient(180deg, #ffe8c2 0%, #ffc09a 10%, #5fd6cf 35%, #36b6b6 55%, #1f8f96 75%, #0d5560 100%)",
+        day:   "linear-gradient(180deg, #66e0d4 0%, #45cdc6 20%, #2bb0ad 45%, #198a8e 70%, #0d5560 100%)",
+        dusk:  "linear-gradient(180deg, #ffb37a 0%, #ff8fae 10%, #ffb37a 22%, #45c0bf 45%, #1f9398 65%, #0d5560 100%)",
+        night: "linear-gradient(180deg, #1a2a44 0%, #243a5a 20%, #2a4a5e 45%, #1c3445 70%, #0e1c2a 100%)",
+      },
+    },
+  };
+  const SCENE_PREF_KEY = "aquarium.scene";
+  let currentScene = "marais";
+
   /* ── Cycle jour/nuit ────────────────────────────── */
   let forcedPhase = null;
 
@@ -50,12 +109,7 @@
     const phase = getDayPhase();
     aquarium.dataset.phase = phase;
 
-    const gradients = {
-      dawn:  "linear-gradient(180deg, #f4a460 0%, #e07850 10%, #1a8fc4 35%, #14729e 55%, #0e5a7e 75%, #072a3f 100%)",
-      day:   "linear-gradient(180deg, #1a8fc4 0%, #14729e 20%, #0e5a7e 45%, #0b3d5b 70%, #072a3f 100%)",
-      dusk:  "linear-gradient(180deg, #c0392b 0%, #d35400 10%, #1a6b8a 35%, #0e5a7e 55%, #0b3d5b 75%, #072a3f 100%)",
-      night: "linear-gradient(180deg, #0a1628 0%, #0b2040 20%, #0a2a4a 45%, #081e35 70%, #050e1a 100%)",
-    };
+    const gradients = scenes[currentScene].gradients;
     aquarium.style.background = gradients[phase];
 
     let stars = aquarium.querySelector(".stars");
@@ -78,6 +132,13 @@
       stars.remove();
     }
   }
+
+  // Restaurer le décor mémorisé avant le premier rendu
+  try {
+    const saved = localStorage.getItem(SCENE_PREF_KEY);
+    if (saved && scenes[saved]) currentScene = saved;
+  } catch (_) {}
+  aquarium.dataset.scene = currentScene;
 
   applyDayNight();
   setInterval(applyDayNight, 60000);
@@ -124,6 +185,51 @@
   }
 
   if (phaseBtn) phaseBtn.addEventListener("click", cyclePhase);
+
+  /* ── Sélecteur de décor ─────────────────────────── */
+  const sceneBtn = document.getElementById("sceneToggle");
+  const sceneLabel = document.getElementById("sceneLabel");
+  const sceneDesc = document.getElementById("sceneDesc");
+  const sceneKeys = Object.keys(scenes);
+  let sceneLabelTimer = null;
+
+  function updateSceneIcon(key) {
+    if (!sceneBtn) return;
+    const tmp = document.createElement("div");
+    tmp.innerHTML = `<svg ${SVG_ATTRS}>${SCENE_ICON_PATHS[key]}</svg>`;
+    const newSvg = tmp.querySelector("svg");
+    const oldSvg = sceneBtn.querySelector("svg");
+    if (oldSvg && newSvg) oldSvg.replaceWith(newSvg);
+  }
+
+  function applySceneUI() {
+    const sc = scenes[currentScene];
+    if (sceneLabel) sceneLabel.textContent = sc.label;
+    if (sceneDesc) sceneDesc.textContent = sc.desc;
+    updateSceneIcon(currentScene);
+    if (sceneBtn) {
+      sceneBtn.setAttribute("aria-pressed", String(currentScene !== "marais"));
+      sceneBtn.setAttribute("aria-label", `Décor : ${sc.label}`);
+    }
+  }
+
+  function cycleScene() {
+    const next = (sceneKeys.indexOf(currentScene) + 1) % sceneKeys.length;
+    currentScene = sceneKeys[next];
+    aquarium.dataset.scene = currentScene;
+    try { localStorage.setItem(SCENE_PREF_KEY, currentScene); } catch (_) {}
+    applySceneUI();
+    if (sceneBtn) {
+      clearTimeout(sceneLabelTimer);
+      sceneBtn.classList.add("scene-showing");
+      sceneLabelTimer = setTimeout(() => sceneBtn.classList.remove("scene-showing"), 2000);
+    }
+    applyDayNight();
+  }
+
+  // État initial du bouton (cohérent avec le décor restauré)
+  applySceneUI();
+  if (sceneBtn) sceneBtn.addEventListener("click", cycleScene);
 
   /* ── Tiroir des contrôles secondaires ───────────── */
   const drawerToggle = document.getElementById("controlsDrawerToggle");
