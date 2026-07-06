@@ -517,20 +517,71 @@
   const galleryClose = document.getElementById("galleryClose");
   const galleryGrid = document.getElementById("galleryGrid");
 
+  /* ── Lightbox ─────────────────────────────────── */
+  let lightboxOpener = null;
+
+  const lightbox = document.createElement("div");
+  lightbox.className = "lightbox";
+  lightbox.setAttribute("role", "dialog");
+  lightbox.setAttribute("aria-modal", "true");
+  lightbox.setAttribute("aria-label", "Vue agrandie du poisson");
+  lightbox.innerHTML = `
+    <button class="lightbox-close" aria-label="Fermer">&times;</button>
+    <div class="lightbox-content">
+      <img class="lightbox-img" src="" alt="">
+      <span class="lightbox-label"></span>
+    </div>`;
+  document.body.appendChild(lightbox);
+
+  const lightboxImg = lightbox.querySelector(".lightbox-img");
+  const lightboxLabel = lightbox.querySelector(".lightbox-label");
+  const lightboxClose = lightbox.querySelector(".lightbox-close");
+
+  function openLightbox(src, alt, label, opener) {
+    lightboxOpener = opener;
+    lightboxImg.src = src;
+    lightboxImg.alt = alt;
+    lightboxLabel.textContent = label;
+    lightbox.classList.add("visible");
+    lightboxClose.focus();
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove("visible");
+    if (lightboxOpener) lightboxOpener.focus();
+    lightboxOpener = null;
+  }
+
+  lightboxClose.addEventListener("click", closeLightbox);
+  lightbox.addEventListener("click", (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  function makeGalleryCard(src, alt, labelText) {
+    const card = document.createElement("button");
+    card.className = "gallery-card";
+    card.setAttribute("aria-label", `Agrandir : ${labelText}`);
+
+    const cardImg = document.createElement("img");
+    cardImg.src = src;
+    cardImg.alt = alt;
+    cardImg.loading = "lazy";
+
+    const label = document.createElement("span");
+    label.className = "gallery-name";
+    label.textContent = labelText;
+
+    card.appendChild(cardImg);
+    card.appendChild(label);
+    card.addEventListener("click", () => openLightbox(src, alt, labelText, card));
+    return card;
+  }
+
   if (galleryGrid) {
     // Ajouter la mascotte en premier
-    const mascotCard = document.createElement("div");
-    mascotCard.className = "gallery-card";
-    const mascotCardImg = document.createElement("img");
-    mascotCardImg.src = "favicon.svg";
-    mascotCardImg.alt = `${config.mascot}, la mascotte`;
-    mascotCardImg.loading = "lazy";
-    const mascotLabel = document.createElement("span");
-    mascotLabel.className = "gallery-name";
-    mascotLabel.textContent = config.mascot;
-    mascotCard.appendChild(mascotCardImg);
-    mascotCard.appendChild(mascotLabel);
-    galleryGrid.appendChild(mascotCard);
+    galleryGrid.appendChild(
+      makeGalleryCard("favicon.svg", `${config.mascot}, la mascotte`, config.mascot)
+    );
 
     // Puis les poissons contribués
     sourceFish.forEach((fishEl) => {
@@ -540,28 +591,18 @@
       const fishName = fishEl.dataset.fishName;
       const nameMatch = alt.match(/poisson de (.+)/i);
       const childName = nameMatch ? nameMatch[1] : "?";
+      const labelText = fishName ? `${fishName} (${childName})` : childName;
 
-      const card = document.createElement("div");
-      card.className = "gallery-card";
-
-      const cardImg = document.createElement("img");
       const picture = fishEl.querySelector("picture");
+      let src;
       if (picture) {
         const source = picture.querySelector("source");
-        cardImg.src = source ? source.srcset : img.src;
+        src = source ? source.srcset : img.src;
       } else {
-        cardImg.src = img.src;
+        src = img.src;
       }
-      cardImg.alt = alt;
-      cardImg.loading = "lazy";
 
-      const label = document.createElement("span");
-      label.className = "gallery-name";
-      label.textContent = fishName ? `${fishName} (${childName})` : childName;
-
-      card.appendChild(cardImg);
-      card.appendChild(label);
-      galleryGrid.appendChild(card);
+      galleryGrid.appendChild(makeGalleryCard(src, alt, labelText));
     });
   }
 
@@ -646,7 +687,9 @@
 
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
-      if (legalPanel && legalPanel.classList.contains("visible")) {
+      if (lightbox.classList.contains("visible")) {
+        closeLightbox();
+      } else if (legalPanel && legalPanel.classList.contains("visible")) {
         closeLegal();
       } else if (galleryPanel && galleryPanel.classList.contains("visible")) {
         closeGallery();
@@ -655,7 +698,7 @@
       }
     }
 
-    const activeDialog = [legalPanel, galleryPanel, panel].find(
+    const activeDialog = [lightbox, legalPanel, galleryPanel, panel].find(
       d => d && d.classList.contains("visible")
     );
     if (e.key === "Tab" && activeDialog) {

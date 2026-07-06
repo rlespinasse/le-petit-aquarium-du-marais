@@ -639,14 +639,24 @@ main {
   justify-content: flex-end;
   text-align: center;
   background: rgba(255, 255, 255, 0.06);
+  border: none;
   border-radius: 12px;
   padding: 0.8rem;
-  transition: background 0.2s;
+  transition: background 0.2s, transform 0.15s;
   min-height: 160px;
+  cursor: pointer;
+  color: inherit;
+  font-family: inherit;
 }
 
 .gallery-card:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.03);
+}
+
+.gallery-card:focus-visible {
+  outline: 2px solid #5ec4ff;
+  outline-offset: 3px;
 }
 
 .gallery-card img {
@@ -886,6 +896,87 @@ main {
   background: rgba(255, 255, 255, 0.2);
 }
 
+
+/* ── Lightbox ────────────────────────────────────── */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+
+.lightbox.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.lightbox-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  max-width: 90vw;
+  max-height: 90vh;
+  animation: lightbox-in 0.25s ease;
+}
+
+@keyframes lightbox-in {
+  from { transform: scale(0.85); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+
+.lightbox.visible .lightbox-content {
+  animation: lightbox-in 0.25s ease;
+}
+
+.lightbox-img {
+  max-width: 80vw;
+  max-height: 70vh;
+  object-fit: contain;
+  border-radius: 16px;
+  box-shadow:
+    0 0 40px rgba(94, 196, 255, 0.25),
+    0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox-label {
+  font-family: "Comic Sans MS", "Chalkboard SE", cursive, sans-serif;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #7dd6ff;
+  text-align: center;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: max(1rem, env(safe-area-inset-top));
+  right: max(1rem, env(safe-area-inset-right));
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  color: #e0f0ff;
+  font-size: 2rem;
+  cursor: pointer;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  touch-action: manipulation;
+}
+
+.lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
 
 /* ── Ajustements responsive ──────────────────────── */
 @media (max-width: 600px) {
